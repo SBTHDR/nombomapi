@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const registerController = {
-    register(req, res, next) {
+    async register(req, res, next) {
 
         // validation
         const registerSchema = Joi.object({
