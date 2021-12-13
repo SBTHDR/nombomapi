@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import CustomErrorHandler from '../../services/CustomErrorHandler';
 import { User } from '../../models';
+import bcrypt from 'bcrypt';
 
 const registerController = {
     async register(req, res, next) {
@@ -28,6 +29,24 @@ const registerController = {
         } catch(err) {
             return next(err);
         }
+
+        // password hashing
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+        // user model
+        const { name, email, password } = req.body;
+        const user = {
+            name,
+            email,
+            password: hashedPassword,
+        }
+
+        try {
+            const result = await User.save();
+        } catch (err) {
+            return next(err);
+        }
+
 
         res.json({ msg: "Express Register" });
     }
