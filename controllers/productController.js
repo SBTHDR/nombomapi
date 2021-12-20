@@ -15,10 +15,15 @@ const multerMultipartData = multer({ storage, limits: { fileSize: 1000000 * 5 } 
 
 const productController = {
     async store(req, res, next) {
-        multerMultipartData(req, res, (err) = {
+
+        multerMultipartData(req, res, (err) => {
             if (err) {
                 return next(CustomErrorHandler.serverError(err.message));
             }
+
+            console.log(req.file);
+            // const filePath = req.file.path;
+            res.json({});
         });
     }
 }
