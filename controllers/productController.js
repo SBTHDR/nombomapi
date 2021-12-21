@@ -120,6 +120,18 @@ const productController = {
         });
 
         res.json(document);
+    },
+
+    async index(req, res, next) {
+        let documents;
+
+        try {
+            documents = await Product.find().select('-updatedAt -__v').sort({ _id: -1 });
+        } catch (err) {
+            return next(CustomErrorHandler.serverError());
+        }
+
+        return res.json(documents);
     }
 }
 
