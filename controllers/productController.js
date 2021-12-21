@@ -112,14 +112,13 @@ const productController = {
         }
 
         // delete img from disk
-        const imagePath = document.image;
+        const imagePath = document._doc.image;
         fs.unlink(`${appRoot}/${imagePath}`, (err) => {
             if (err) {
                 return next(CustomErrorHandler.serverError());
             }
+            res.json(document);
         });
-
-        res.json(document);
     },
 
     async index(req, res, next) {
@@ -132,6 +131,18 @@ const productController = {
         }
 
         return res.json(documents);
+    },
+
+    async show(req, res, next) {
+        let document;
+
+        try {
+            document = await Product.findOne({ _id: req.params.id }).select('-updatedAt -__v');
+        } catch (err) {
+            return next(CustomErrorHandler.serverError());
+        }
+
+        return res.json(document);
     }
 }
 
